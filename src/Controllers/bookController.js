@@ -46,6 +46,12 @@ const createBook = async function (req, res) {
 
         //Validate subcategory
         if (!validation.isValid(subcategory)) return res.status(400).send({ status: false, message: "Subcategory is required" });
+        if (typeof (subcategory) == "object") {
+            for (let i = 0; i < subcategory.length; i++) {
+                if (!validation.isValid(subcategory[i]))
+                    return res.status(400).send({ status: false, message: "SUB-CATEGORY IS NOT VALID" })
+            }
+        }
         if (!validation.isValidScripts(subcategory)) return res.status(400).send({ status: false, message: "Subcategory is invalid (Should Contain Alphabets, numbers, quotation marks  & [@ , . ; : ? & ! _ - $]." });
 
         //Validate releasedAt
