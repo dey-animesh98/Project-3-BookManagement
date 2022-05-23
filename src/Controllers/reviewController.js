@@ -173,5 +173,5 @@ const deleteReview = async function (req, res) {
 }
 
 //Exporting Modules
-module.exports.createReview = {createReview,deleteReview,updateReview}
+module.exports = {createReview,deleteReview,updateReview}
 
