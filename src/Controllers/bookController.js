@@ -3,13 +3,8 @@ const bookModel = require("../Models/bookModel");
 const reviewModel = require("../Models/reviewModel");
 const validation = require("../Middlewares/validation");
 const userModel = require("../Models/userModel");
-const ObjectId = require("mongoose").Types.ObjectId;
-
-//-----------------------------AWS--------------------------------//
-const AWS = require('aws-sdk')
 const aws = require('../AWS/aws-S3')
-
-
+const ObjectId = require("mongoose").Types.ObjectId;
 
 //-----------------------------------------------------------------------Create Book Api----------------------------------------------------------------------//
 const createBook = async function (req, res) {

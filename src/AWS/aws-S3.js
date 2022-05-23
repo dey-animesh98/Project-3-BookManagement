@@ -22,30 +22,11 @@ let uploadFile= async ( file) =>{
          if(err) {
              return reject({"error": err})
          }
-         console.log(data)
-         console.log("file uploaded succesfully")
+        //  console.log(data)
+        //  console.log("file uploaded succesfully")
          return resolve(data.Location)
      })
     })
  }
-// const uploadFileAws =  async function(req, res){
-
-//     try{
-//         let files= req.files
-//         if(files && files.length>0){
-        
-//             let uploadedFileURL= await uploadFile( files[0] )
-//             res.status(201).send({status:true,message: "file uploaded succesfully", data: uploadedFileURL})
-//         }
-//         else{
-//             res.status(400).send({status:false,message: "No file found" })
-//         }
-        
-//     }
-//     catch(err){
-//         res.status(500).send({msg: err})
-//     }
-    
-// }
 
 module.exports ={uploadFile}

@@ -4,11 +4,7 @@ const router = express.Router();
 const userController = require("../Controllers/userController")
 const bookController = require("../Controllers/bookController")
 const reviewController = require("../Controllers/reviewController")
-const awsController = require('../AWS/aws-S3')
 const middleware = require("../Middlewares/auth")
-
-// AWS-S3 API
-// router.post("/write-file-aws",awsController.uploadFileAws)
 
 //User & Login API
 router.post("/register", userController.userData);
