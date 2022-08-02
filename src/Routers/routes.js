@@ -22,5 +22,9 @@ router.post("/books/:bookId/review", reviewController.createReview)
 router.put("/books/:bookId/review/:reviewId", reviewController.updateReview)
 router.delete("/books/:bookId/review/:reviewId", reviewController.deleteReview)
 
+//Error Handing
+router.all('/*', (req, res) => {
+    res.status(404).send({ status: false, message: "URL Not Found" })
+})
 
 module.exports = router

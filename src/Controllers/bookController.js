@@ -13,7 +13,11 @@ const createBook = async function (req, res) {
         // Validate Request Body
         if (!validation.isValidRequest(data)) return res.status(400).send({ status: false, message: "No input by user." });
         // Destructuring request body
-        const { title, excerpt, userId, ISBN, category,subcategory, releasedAt, isDeleted,bookCover } = data;
+        const { title, excerpt, userId, ISBN, category, subcategory, releasedAt, isDeleted, bookCover } = data;
+
+        //Authorization
+        const userIdFromToken = req.userId
+        if (userIdFromToken !== userId) return res.status(403).send({ status: false, message: "Unauthorized Access." })
 
         // Validate title
         if (!validation.isValid(title)) return res.status(400).send({ status: false, message: "Book title is required" });
@@ -47,15 +51,15 @@ const createBook = async function (req, res) {
         let files = req.files
         if (files && files.length > 0) {
             let uploadedFileURL = await aws.uploadFile(files[0])
-            const uniqueCover = await bookModel.findOne({bookCover:uploadedFileURL})
-        if(uniqueCover) return res.status(400).send({status:false, message:"Book cover already exsits."})
+            const uniqueCover = await bookModel.findOne({ bookCover: uploadedFileURL })
+            if (uniqueCover) return res.status(400).send({ status: false, message: "Book cover already exsits." })
 
             data['bookCover'] = uploadedFileURL
         }
         else {
-           return res.status(400).send({ msg: "No file found" })
+            return res.status(400).send({ msg: "No file found" })
         }
-        
+
         //------------------------------------------------------------------
         //Validate subcategory
         if (!validation.isValid(subcategory)) return res.status(400).send({ status: false, message: "Subcategory is required" });
@@ -67,7 +71,7 @@ const createBook = async function (req, res) {
         }
         if (!validation.isValidScripts(subcategory)) return res.status(400).send({ status: false, message: "Subcategory is invalid (Should Contain Alphabets, numbers, quotation marks  & [@ , . ; : ? & ! _ - $]." });
         let subArray = subcategory.split(',')
-        data['subcategory']= subArray
+        data['subcategory'] = subArray
 
         //Validate releasedAt
         if (!validation.isValid(releasedAt)) return res.status(400).send({ status: false, message: "Release date is Required" })
@@ -78,9 +82,7 @@ const createBook = async function (req, res) {
 
         // const bookData = { title, excerpt, userId, ISBN, category, bookCover, subcategory, releasedAt }
 
-        //Authorization
-        const userIdFromToken = req.userId
-        if (userIdFromToken !== userId) return res.status(403).send({ status: false, message: "Unauthorized Access." })
+
 
         const savedBook = await bookModel.create(data);
         return res.status(201).send({ status: true, message: "Book Created Successfully", data: savedBook });
@@ -263,7 +265,7 @@ const deleteBook = async function (req, res) {
 }
 
 // Exporting Modules
-module.exports= { createBook, getBooks, getReviewDetails, updatebook, deleteBook }
+module.exports = { createBook, getBooks, getReviewDetails, updatebook, deleteBook }
 
 
 
