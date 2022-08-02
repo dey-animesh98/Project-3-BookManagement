@@ -121,7 +121,10 @@ const getBooks = async function (req, res) {
             filter["subcategory"] = { $all: subCategoryArray };
         }
 
-        const findBooks = await bookModel.find(filter).select({ title: 1, excerpt: 1, userId: 1, category: 1, reviews: 1, releasedAt: 1 }).collation({locale:"en",strength:2});
+        const findBooks = await bookModel
+            .find(filter)
+            .select({ title: 1, excerpt: 1, userId: 1, category: 1, reviews: 1, releasedAt: 1 })
+            .collation({ locale: "en", strength: 2 });
 
         if (findBooks.length === 0)
             return res.status(404).send({ status: false, message: "No Book(s) found." });
