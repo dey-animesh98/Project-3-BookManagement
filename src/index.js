@@ -1,26 +1,21 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const multer = require('multer')
-const app = express()
-const port = 3000
-const route = require('./Routers/routes');
+require('colors')
+require('dotenv').config()
 
+const app = express()
+const route = require('./Routers/routes');
+const PORT = process.env.PORT || 3000
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(multer().any())
 app.use('/', route);
 
-mongoose.connect("mongodb+srv://animesh-dey98:9I9JRLwql3bINqUX@cluster0.vhmqo.mongodb.net/group32Database", {
-    useNewUrlParser: true
-})
+mongoose.connect(process.env.CONNECT_MONGODB, { useNewUrlParser: true })
 
-    .then(() => console.log("MongoDB is Connected."))
-    .catch((err) => console.log(err.message))
+    .then(() => console.log("MongoDB is Connected ✔️".rainbow))
+    .catch((err) => console.log(`${err.message}`.bgRed.white))
 
-
-
-
-app.listen(port, function () {
-    console.log("Express app is running on ", process.env.PORT || port)
-})
+app.listen(PORT, () => console.log(`Server is running on port ${PORT}`.rainbow))

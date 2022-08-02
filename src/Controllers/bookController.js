@@ -1,3 +1,4 @@
+
 //Importing Required Modules & Packeges
 const bookModel = require("../Models/bookModel");
 const reviewModel = require("../Models/reviewModel");
@@ -120,7 +121,7 @@ const getBooks = async function (req, res) {
             filter["subcategory"] = { $all: subCategoryArray };
         }
 
-        const findBooks = await bookModel.find(filter).select({ title: 1, excerpt: 1, userId: 1, category: 1, reviews: 1, releasedAt: 1 });
+        const findBooks = await bookModel.find(filter).select({ title: 1, excerpt: 1, userId: 1, category: 1, reviews: 1, releasedAt: 1 }).collation({locale:"en",strength:2});
 
         if (findBooks.length === 0)
             return res.status(404).send({ status: false, message: "No Book(s) found." });
@@ -252,10 +253,10 @@ const deleteBook = async function (req, res) {
         if (userIdFromToken !== findDeletedBook.userId.toString()) return res.status(403).send({ status: false, message: "Unauthorized Access." })
 
         // Book delete
-        const deletedBook = await bookModel.findOneAndUpdate({ _id: bookId }, { $set: { isDeleted: true, deletedAt: new Date(), reviews: 0 } }, { new: true })
+        await bookModel.findOneAndUpdate({ _id: bookId }, { $set: { isDeleted: true, deletedAt: new Date(), reviews: 0 } }, { new: true })
 
         // Delete all reviews of this book
-        const deleteBookReviews = await reviewModel.find({ bookId: bookId, isDeleted: false }).updateMany({ $set: { isDeleted: true } })
+        await reviewModel.find({ bookId: bookId, isDeleted: false }).updateMany({ $set: { isDeleted: true } })
 
         res.status(200).send({ status: true, message: "Book & Reviews of the book are Deleted" });
     }
